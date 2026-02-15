@@ -1,0 +1,477 @@
+/* Custom animations and additional styles with Dark Theme */
+
+/* Dark Theme Base Colors */
+body {
+    background-color: #0f172a !important; /* slate-900 */
+    color: #e2e8f0; /* slate-200 */
+}
+
+/* Custom Background Colors */
+.bg-slate-700 {
+    background-color: #334155;
+    border: 1px solid #475569;
+}
+
+.bg-slate-800 {
+    background-color: #1e293b;
+}
+
+.bg-slate-900 {
+    background-color: #0f172a;
+}
+
+.bg-slate-600 {
+    background-color: #475569;
+}
+
+/* Text Colors for Dark Theme */
+.text-slate-100 {
+    color: #f1f5f9;
+}
+
+.text-slate-200 {
+    color: #e2e8f0;
+}
+
+.text-slate-300 {
+    color: #cbd5e1;
+}
+
+.text-slate-400 {
+    color: #94a3b8;
+}
+
+/* Border Colors */
+.border-slate-600 {
+    border-color: #475569;
+}
+
+.border-slate-700 {
+    border-color: #334155;
+}
+
+.border-slate-500 {
+    border-color: #64748b;
+}
+
+/* Enhanced shadows for dark theme */
+.shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+.shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading Animation */
+.loading {
+    position: relative;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid #3364aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Pulse animation for panic button */
+#panicBtn {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Smooth transitions */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #475569; /* slate-600 */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* slate-500 */
+}
+
+/* Hover effects for dark theme */
+.hover\:bg-slate-600:hover {
+    background-color: #475569;
+}
+
+.hover\:bg-slate-700:hover {
+    background-color: #334155;
+}
+
+.hover\:text-blue-400:hover {
+    color: #60a5fa;
+}
+
+/* Card hover effects */
+.hover\:shadow-2xl:hover {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.hover\:scale-105:hover {
+    transform: scale(1.05);
+}
+
+/* Button enhancements */
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: 2px solid #58719a;
+    outline-offset: 2px;
+}
+
+/* Alert animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Glow effect for important elements */
+.glow-blue {
+    box-shadow: 0 0 15px rgba(55, 123, 234, 0.3);
+}
+
+.glow-red {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+
+.glow-green {
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+}
+
+/* Status indicators */
+.status-safe {
+    background-color: #166534; /* green-800 */
+    color: #bbf7d0; /* green-200 */
+}
+
+.status-warning {
+    background-color: #a16207; /* yellow-700 */
+    color: #fef3c7; /* yellow-100 */
+}
+
+.status-danger {
+    background-color: #991b1b; /* red-800 */
+    color: #fecaca; /* red-200 */
+}
+
+/* Mobile responsiveness enhancements */
+@media (max-width: 768px) {
+    .mobile-padding {
+        padding: 1rem;
+    }
+    
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+
+    #mobileMenu {
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* Gradient overlays for hero sections */
+.gradient-overlay {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+}
+
+.gradient-blue {
+    background: linear-gradient(135deg, #223a8c 0%, #4a8bf4 50%, #60a5fa 100%);
+}
+
+/* Custom animations for dashboard elements */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+
+/* Map container styling */
+.map-container {
+    background: linear-gradient(45deg, #334155, #475569);
+    border: 2px solid #64748b;
+}
+
+/* Form inputs for dark theme */
+input, select, textarea {
+    background-color: #334155 !important;
+    border-color: #475569 !important;
+    color: #e2e8f0 !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #478af6 !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Navbar enhancements */
+nav {
+    backdrop-filter: blur(10px);
+    background-color: rgba(30, 41, 59, 0.95) !important;
+}
+
+/* Footer styling */
+footer {
+    background-color: #0f172a !important;
+    border-top: 1px solid #334155;
+}
+
+/* Icon colors for dark theme */
+.icon-blue { color: #61a3f4; }
+.icon-red { color: #f87171; }
+.icon-green { color: #4ade80; }
+.icon-yellow { color: #fbbf24; }
+.icon-purple { color: #a78bfa; }
+
+/* Special effects for panic button */
+#panicBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+/* Loading states for buttons */
+.btn-loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s ease-in-out infinite;
+}
+
+/* Additional custom utilities */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.backdrop-blur {
+    backdrop-filter: blur(8px);
+}
+
+/* Custom focus states */
+.focus-visible:focus {
+    outline: 2px solid #4187f8;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Improved accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Map specific styles */
+.tourist-marker {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tourist-marker:hover {
+    transform: scale(1.5);
+    z-index: 10;
+}
+
+.tourist-marker.emergency {
+    animation: emergency-pulse 1s infinite;
+}
+
+@keyframes emergency-pulse {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1.2); 
+        opacity: 0.7; 
+    }
+}
+
+/* Filter button active state */
+.filter-btn.active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Map zoom animation */
+#touristMarkers {
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+}
+
+/* Responsive map */
+@media (max-width: 768px) {
+    #mapContainer {
+        height: 300px;
+    }
+    
+    .tourist-marker {
+        transform: scale(1.2);
+    }
+}
+
+/* Enhanced Navbar Styles */
+.nav-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.nav-link:hover::before {
+    left: 100%;
+}
+
+.nav-link.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.mobile-nav-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.mobile-nav-link:hover::before {
+    left: 100%;
+}
+
+.mobile-nav-link.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* Navbar backdrop blur enhancement */
+nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Smooth transitions for navbar elements */
+nav a, nav button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Logo hover effect */
+nav .flex.items-center a:hover {
+    transform: scale(1.05);
+}
+
+/* Mobile menu slide animation */
+#mobileMenu {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+#mobileMenu.show {
+    transform: translateY(0);
+}

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Hub - Tourist Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .loading-dots {
+            display: inline-block;
+        }
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center mb-2">🤖 Gemini AI Hub</h1>
+            <p class="text-center text-lg opacity-90">Your AI-powered travel companion</p>
+        </div>
+    </header>
+
+    <!-- API Key Setup -->
+    <div id="apiSetup" class="container mx-auto px-4 py-6">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-4 text-center">🔑 Enter Your Password </h2>
+            <p class="text-gray-600 mb-4 text-sm">Enter your Gemini API key to get started. Get yours from <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Google AI Studio</a></p>
+            <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <button onclick="saveApiKey()" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">Save & Continue</button>
+        </div>
+    </div>
+
+    <!-- Main Features -->
+    <div id="mainContent" class="hidden">
+        <!-- Feature Selection -->
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <!-- Tourist Chatbot -->
+                <div class="feature-card bg-white rounded-lg shadow-lg p-6 cursor-pointer" onclick="showFeature('chatbot')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🗣️</div>
+                        <h3 class="text-xl font-bold mb-2">Tourist Chatbot</h3>
+                        <p class="text-gray-600">Get travel advice, recommendations, and local insights</p>
+                    </div>
+                </div>
+
+                <!-- Language Translator -->
+                <div class="feature-card bg-white rounded-lg shadow-lg p-6 cursor-pointer" onclick="showFeature('translator')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🌐</div>
+                        <h3 class="text-xl font-bold mb-2">Language Translator</h3>
+                        <p class="text-gray-600">Translate text between multiple languages instantly</p>
+                    </div>
+                </div>
+
+                <!-- Safety Alert Generator -->
+                <div class="feature-card bg-white rounded-lg shadow-lg p-6 cursor-pointer" onclick="showFeature('safety')">
+                    <div class="text-center">
+                        <div class="text-4xl mb-4">🚨</div>
+                        <h3 class="text-xl font-bold mb-2">Safety Alerts</h3>
+                        <p class="text-gray-600">Get safety information and alerts for your destination</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tourist Chatbot Feature -->
+        <div id="chatbotFeature" class="hidden container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg">
+                    <div class="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+                        <h2 class="text-xl font-bold">🗣️ Tourist Chatbot</h2>
+                        <button onclick="showFeature('home')" class="text-white hover:text-gray-200">✕</button>
+                    </div>
+                    <div id="chatMessages" class="h-96 overflow-y-auto p-4 bg-gray-50">
+                        <div class="chat-message bg-blue-100 p-3 rounded-lg mb-3">
+                            <strong>Tourist Bot:</strong> Hello! I'm your AI travel assistant. Ask me about destinations, local attractions, food recommendations, or any travel-related questions! 🌍
+                        </div>
+                    </div>
+                    <div class="p-4 border-t">
+                        <div class="flex gap-2">
+                            <input type="text" id="chatInput" placeholder="Ask about travel destinations, attractions, food..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button onclick="sendChatMessage()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Translator Feature -->
+        <div id="translatorFeature" class="hidden container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg">
+                    <div class="bg-green-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+                        <h2 class="text-xl font-bold">🌐 Language Translator</h2>
+                        <button onclick="showFeature('home')" class="text-white hover:text-gray-200">✕</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">From Language</label>
+                                <select id="fromLang" class="w-full p-3 border border-gray-300 rounded-lg mb-4">
+                                    <option value="auto">Auto-detect</option>
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                                <textarea id="sourceText" placeholder="Enter text to translate..." class="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">To Language</label>
+                                <select id="toLang" class="w-full p-3 border border-gray-300 rounded-lg mb-4">
+                                    <option value="hi">Hindi</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                    <option value="de">German</option>
+                                    <option value="ja">Japanese</option>
+                                    <option value="ko">Korean</option>
+                                    <option value="zh">Chinese</option>
+                                </select>
+                                <div id="translatedText" class="w-full h-32 p-3 bg-gray-50 border border-gray-300 rounded-lg overflow-y-auto">
+                                    <span class="text-gray-500">Translation will appear here...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button onclick="translateText()" class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors">Translate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Alert Generator Feature -->
+        <div id="safetyFeature" class="hidden container mx-auto px-4 py-8">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg">
+                    <div class="bg-red-600 text-white p-4 rounded-t-lg flex items-center justify-between">
+                        <h2 class="text-xl font-bold">🚨 Safety Alert Generator</h2>
+                        <button onclick="showFeature('home')" class="text-white hover:text-gray-200">✕</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium mb-2">Destination</label>
+                            <input type="text" id="destination" placeholder="Enter city or country name..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium mb-2">Travel Type</label>
+                            <select id="travelType" class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="general">General Travel</option>
+                                <option value="business">Business Travel</option>
+                                <option value="adventure">Adventure Travel</option>
+                                <option value="family">Family Travel</option>
+                                <option value="solo">Solo Travel</option>
+                            </select>
+                        </div>
+                        <div class="text-center mb-6">
+                            <button onclick="generateSafetyAlert()" class="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition-colors">Generate Safety Report</button>
+                        </div>
+                        <div id="safetyReport" class="hidden">
+                            <h3 class="text-lg font-bold mb-3">Safety Report</h3>
+                            <div id="safetyContent" class="bg-gray-50 p-4 rounded-lg border"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = '';
+        let currentFeature = 'home';
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                alert('Please enter your Gemini API key');
+                return;
+            }
+            apiKey = key;
+            document.getElementById('apiSetup').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+        function showFeature(feature) {
+            // Hide all features
+            document.getElementById('chatbotFeature').classList.add('hidden');
+            document.getElementById('translatorFeature').classList.add('hidden');
+            document.getElementById('safetyFeature').classList.add('hidden');
+            
+            currentFeature = feature;
+            
+            // Show selected feature
+            if (feature === 'chatbot') {
+                document.getElementById('chatbotFeature').classList.remove('hidden');
+            } else if (feature === 'translator') {
+                document.getElementById('translatorFeature').classList.remove('hidden');
+            } else if (feature === 'safety') {
+                document.getElementById('safetyFeature').classList.remove('hidden');
+            }
+        }
+
+        async function callGeminiAPI(prompt, systemPrompt = '') {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: systemPrompt + prompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                return 'Sorry, I encountered an error. Please check your API key and try again.';
+            }
+        }
+
+        // Tourist Chatbot Functions
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message bg-blue-50 p-3 rounded-lg mb-3 ml-8';
+            userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+            chatMessages.appendChild(userMsg);
+
+            // Add loading message
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'chat-message bg-gray-100 p-3 rounded-lg mb-3';
+            loadingMsg.innerHTML = '<strong>Tourist Bot:</strong> <span class="loading-dots">Thinking</span>';
+            chatMessages.appendChild(loadingMsg);
+
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            const systemPrompt = 'You are a helpful tourist chatbot. Provide travel advice, recommendations, and local insights. Be friendly, informative, and concise. Focus on practical travel information. ';
+            const response = await callGeminiAPI(message, systemPrompt);
+
+            // Remove loading message and add response
+            chatMessages.removeChild(loadingMsg);
+            const botMsg = document.createElement('div');
+            botMsg.className = 'chat-message bg-blue-100 p-3 rounded-lg mb-3';
+            botMsg.innerHTML = `<strong>Tourist Bot:</strong> ${response}`;
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Language Translator Functions
+        async function translateText() {
+            const sourceText = document.getElementById('sourceText').value.trim();
+            if (!sourceText) {
+                alert('Please enter text to translate');
+                return;
+            }
+
+            const fromLang = document.getElementById('fromLang').value;
+            const toLang = document.getElementById('toLang').value;
+            const translatedDiv = document.getElementById('translatedText');
+
+            translatedDiv.innerHTML = '<span class="loading-dots text-gray-500">Translating</span>';
+
+            const langNames = {
+                'auto': 'auto-detect',
+                'en': 'English',
+                'hi': 'Hindi',
+                'es': 'Spanish',
+                'fr': 'French',
+                'de': 'German',
+                'ja': 'Japanese',
+                'ko': 'Korean',
+                'zh': 'Chinese'
+            };
+
+            const prompt = `Translate the following text from ${langNames[fromLang]} to ${langNames[toLang]}. Only provide the translation, no explanations:\n\n${sourceText}`;
+            const translation = await callGeminiAPI(prompt);
+
+            translatedDiv.innerHTML = translation;
+        }
+
+        // Safety Alert Generator Functions
+        async function generateSafetyAlert() {
+            const destination = document.getElementById('destination').value.trim();
+            const travelType = document.getElementById('travelType').value;
+
+            if (!destination) {
+                alert('Please enter a destination');
+                return;
+            }
+
+            const safetyReport = document.getElementById('safetyReport');
+            const safetyContent = document.getElementById('safetyContent');
+
+            safetyReport.classList.remove('hidden');
+            safetyContent.innerHTML = '<span class="loading-dots">Generating safety report</span>';
+
+            const systemPrompt = 'You are a travel safety expert. Provide comprehensive safety information for travelers. Include current safety conditions, health precautions, local laws, emergency contacts, and practical safety tips. Be informative but not alarmist. ';
+            const prompt = `Generate a detailed safety report for ${travelType} to ${destination}. Include:
+1. Current safety situation
+2. Health and medical considerations
+3. Local laws and customs to be aware of
+4. Emergency contact information
+5. Practical safety tips
+6. Areas or situations to avoid
+
+Format the response with clear headings and bullet points.`;
+
+            const response = await callGeminiAPI(prompt, systemPrompt);
+            safetyContent.innerHTML = response.replace(/\n/g, '<br>');
+        }
+
+        // Event listeners
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        document.getElementById('sourceText').addEventListener('input', function() {
+            if (this.value.trim()) {
+                translateText();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98cd575617482e8f',t:'MTc2MDE3NTA1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
